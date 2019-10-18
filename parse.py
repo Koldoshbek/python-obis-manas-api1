@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-import courses
+import courses,info
 
 url = 'http://obis.manas.edu.kg/'
 
@@ -26,24 +26,13 @@ def to_dict(all_links):
     result['reference'] = all_links[5]
     result['change_password'] = all_links[6]
     result['exit'] = all_links[7]
-    get_info(result['info'])
+    print(info.get_info(result['info']))
     print(courses.get_courses((result['courses'])))
     print(result)
     return result
 
 
-def get_info(data):
-    about_info = {}
-    soup = BeautifulSoup(courses.get_html(data), 'lxml')
-    info = soup.find('table', class_='bgc15').find_all('td')
-    about_info['st_number'] = info[2].next
-    about_info['first_name'] = info[4].next.replace('Þ', 'Ş').replace('Ý', 'I')
-    about_info['last_name'] = info[6].next.replace('Þ', 'Ş').replace('Ý', 'I')
-    about_info['region'] = info[8].next.replace('Þ', 'Ş')
-    about_info['date_of_birth'] = info[10].next
-    about_info['name_of_father'] = info[12].next.replace('Ý', 'I')
-    about_info['name_of_mother'] = info[14].next.replace('Ý', 'I')
-    return about_info
+
 
 
 data = {
